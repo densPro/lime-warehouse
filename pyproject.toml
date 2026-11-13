@@ -1,0 +1,45 @@
+[project]
+name = "lime-warehouse"
+version = "0.1.0"
+description = "Warehouse backend for the fruit ERP (FastAPI, domain-driven)"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.30",
+    "sqlalchemy[asyncio]>=2.0",
+    "asyncpg>=0.29",
+    "aiosqlite>=0.20",
+    "alembic>=1.13",
+    "pydantic-settings>=2.4",
+    "pyjwt[crypto]>=2.9",
+    "httpx>=0.27",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "pytest-asyncio>=0.24", "ruff>=0.6"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 110
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+ignore = ["B008"]  # FastAPI's Depends() in defaults is the intended style
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["E501"]
+"src/lime_warehouse/*/router.py" = ["E501"]
+"alembic/versions/*" = ["E501", "I", "UP", "W"]
+"src/lime_warehouse/shared/mango_auth_client.py" = ["E501", "UP", "I"]
